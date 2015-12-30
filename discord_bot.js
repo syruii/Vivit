@@ -626,7 +626,7 @@ bot.on("message", function (msg) {
                 if(description){
                     info += "\n\t" + description;
                 }
-                bot.sendMessage(msg.channel,info);
+                bot.sendMessage(msg.client.user,info);
             }
         }
 		else if(cmd) {
