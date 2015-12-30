@@ -340,7 +340,7 @@ var commands = {
 			var usr = 0;
 			while (usr < bot.users.length) {
 				if (bot.users[usr].username == suffix){
-					if (bot.users[usr].avatar === null) }{
+					if (bot.users[usr].avatar === null){
 						bot.sendMessage(msg.channel,"Specified user does not have an avatar.");
 						return;
 					}
