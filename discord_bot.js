@@ -337,7 +337,13 @@ var commands = {
         usage: "<user_name>",
         description: "prints url to avatar or specified user",
         process: function(bot,msg,suffix){
-			console.log(bot.users);
+			var usr = 0;
+			while (usr < bot.users.length) {
+				if (bot.users[usr].username == suffix){
+					bot.sendMessage(msg.channel,bot.users[usr].avatarURL);
+				}
+				usr++;
+			}
 			}
     },
     "wiki": {
