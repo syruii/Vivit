@@ -333,6 +333,13 @@ var commands = {
         description: "logs message to bot console",
         process: function(bot,msg,suffix){console.log(msg.content);}
     },
+	"avatar": {
+        usage: "<user_name>",
+        description: "prints url to avatar or specified user",
+        process: function(bot,msg,suffix){
+			console.log(bot.users);
+			}
+    },
     "wiki": {
         usage: "<search terms>",
         description: "returns the summary of the first matching search result from Wikipedia",
