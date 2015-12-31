@@ -313,7 +313,7 @@ Poker.prototype.raise = function (query, msg, bot) {
 	bot.sendMessage(msg.channel, msg.author + " has raised by $" + num +". The total bet for the hand is $"+this.bet+".");
 	//Finds next player to the right in array to pass turn
 	this.current_player = (this.current_player+1)%this.players.length;
-	while (this.players[this.current_player].fold == true && this.players[this.current_player].money > 0) {
+	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 		this.current_player = (this.current_player+1)%this.players.length;
 	}
 	if (endOfRoundCheck(this,bot) === true) {
@@ -376,7 +376,7 @@ Poker.prototype.check = function (msg,bot) {
 	this.players[this.current_player].last_move = "check";
 	//Finds next player etc.
 	this.current_player = (this.current_player+1)%this.players.length;
-	while (this.players[this.current_player].fold == true && this.players[this.current_player].money > 0) {
+	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 		this.current_player = (this.current_player+1)%this.players.length;
 	}
 	if (endOfRoundCheck(this,bot) === true) {
@@ -399,7 +399,7 @@ Poker.prototype.call = function (msg,bot) {
 		return;
 	}
 	//Sets player's current bet to the current round bet, and deducts difference from money and adds to pot
-	if (this.players[this.current_player].money - (this.bet - this.players[this.current_player].bet) < 0) {
+	if (this.players[this.current_player].money - (this.bet - this.players[this.current_player].bet) <= 0) {
 		//sidepot created
 		this.players[this.current_player].bet += this.players[this.current_player].money;
 		this.pot += this.players[this.current_player].money;
@@ -415,7 +415,7 @@ Poker.prototype.call = function (msg,bot) {
 	this.players[this.current_player].last_move = "call";
 	//Finds next player etc.
 	this.current_player = (this.current_player+1)%this.players.length;
-	while (this.players[this.current_player].fold == true && this.players[this.current_player].money > 0) {
+	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 		this.current_player = (this.current_player+1)%this.players.length;
 	}
 	if (endOfRoundCheck(this,bot) === true) {
@@ -450,7 +450,7 @@ function nextRound(poker,bot) {
 		for (i=0; i < poker.players.length; i++){
 			poker.players[i].last_move = null;
 		}
-		while (poker.players[poker.current_player].fold == true && poker.players[poker.current_player].money > 0) {
+        while (poker.players[poker.current_player].fold == true || poker.players[poker.current_player].money <= 0) {
 			poker.current_player = (poker.current_player+1)%poker.players.length;
 		}
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
@@ -466,7 +466,7 @@ function nextRound(poker,bot) {
 		for (i=0; i < poker.players.length; i++){
 			poker.players[i].last_move = null;
 		}
-		while (poker.players[poker.current_player].fold == true && poker.players[poker.current_player].money > 0) {
+		while (poker.players[poker.current_player].fold == true || poker.players[poker.current_player].money <= 0) {
 			poker.current_player = (poker.current_player+1)%poker.players.length;
 		}
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
@@ -482,7 +482,7 @@ function nextRound(poker,bot) {
 		for (i=0; i < poker.players.length; i++){
 			poker.players[i].last_move = null;
 		}
-		while (poker.players[poker.current_player].fold == true && poker.players[poker.current_player].money > 0) {
+		while (poker.players[poker.current_player].fold == true || poker.players[poker.current_player].money <= 0) {
 			poker.current_player = (poker.current_player+1)%poker.players.length;
 		}
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
@@ -563,6 +563,7 @@ function nextHand(poker,bot){
 		if (poker.players[i].money < 1) {
 			bot.sendMessage(poker.activeChannel, poker.players[i].user + " has been eliminated.");
 			poker.players.splice(i,1);
+			continue;
 		}
 		poker.players[i].hand.length = 0;
 		poker.players[i].fold = false;
