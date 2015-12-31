@@ -338,8 +338,8 @@ Poker.prototype.fold = function (msg,bot) {
 	this.players[this.current_player].last_move = "fold";
 	if (this.players_left == 1) {
 		var winner;
-		for (i=0; i < poker.players.length; i++) {
-			if (poker.players[i].fold == false){
+		for (i=0; i < this.players.length; i++) {
+			if (this.players[i].fold == false){
 				winner = i;
 				endRound(winner,this,bot);
 			}			
