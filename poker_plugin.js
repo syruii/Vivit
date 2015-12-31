@@ -5,7 +5,7 @@ function Poker () {
 	this.game = false;
 	this.deck = new Array(52);
 	this.players = [];
-	this.current_player : null;
+	this.current_player = null;
 	this.community = [];
 	this.bigblind = 50;
 	this.smallblind = 25;
