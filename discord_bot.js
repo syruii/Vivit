@@ -18,6 +18,9 @@ var wolfram_plugin = new wa();
 var dict = require("./dictionary_plugin");
 var dictionary_plugin = new dict();
 
+var poker = require("./poker_plugin.js");
+var poker_plugin = new poker();
+
 var danbooru = require("./danbooru_plugin");
 var danbooru_plugin = new danbooru();
 // Get the email and password
@@ -153,6 +156,27 @@ var commands = {
 			bot.sendMessage(msg.channel,suffix,true);
 		}
 	},
+	//Poker stuff
+	"poker": {
+        usage: "<buy in>",
+        description: "starts a new poker game",
+        process: function(bot,msg,suffix){ 
+			poker_plugin.new(msg.channel,suffix,bot,true);
+		}
+	},
+	"join": {
+        usage: "",
+        description: "joins a poker game in the recruitment phase",
+        process: function(bot,msg,suffix){ 
+			poker_plugin.join(msg.channel,suffix,bot,true);
+		}
+	},
+	
+	
+	
+	
+	
+	
 	"goodshit": {
         description: 	"thats some good shit",
         process: function(bot,msg,suffix){ 
@@ -334,7 +358,7 @@ var commands = {
         process: function(bot,msg,suffix){console.log(msg.content);}
     },
 	"avatar": {
-        usage: "<user_name>",
+        usage: "<username>",
         description: "prints url to avatar or specified user",
         process: function(bot,msg,suffix){
 			var usr = 0;
