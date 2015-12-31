@@ -1,7 +1,7 @@
 var util = require('util');
 var winston = require('winston');
 
-function Poker () = {
+function Poker () {
 	this.game = false;
 	this.deck = new Array(52);
 	this.players = [];
