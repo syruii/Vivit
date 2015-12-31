@@ -156,25 +156,132 @@ var commands = {
 			bot.sendMessage(msg.channel,suffix,true);
 		}
 	},
+	
 	//Poker stuff
 	"poker": {
         usage: "<buy in>",
         description: "starts a new poker game",
         process: function(bot,msg,suffix){ 
-			poker_plugin.new(msg.channel,suffix,bot,true);
+			poker_plugin.new(suffix,msg,bot,true);
 		}
 	},
 	"join": {
         usage: "",
         description: "joins a poker game in the recruitment phase",
         process: function(bot,msg,suffix){ 
-			poker_plugin.join(msg.channel,suffix,bot,true);
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.join(suffix,msg,bot,true);
 		}
 	},
+	"start": {
+        usage: "",
+        description: "ends recruitment and begins poker game",
+        process: function(bot,msg,suffix){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.opening(msg,bot,true);
+		}
+	},
+	"raise": {
+        usage: "<amount>",
+        description: "bets/raises BY amount for current betting round (includes blinds)",
+        process: function(bot,msg,suffix){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.raise(suffix,msg,bot,true);
+		}
+	},
+	"fold": {
+        usage: "",
+        description: "fold your hand",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.fold(msg,bot,true);
+		}
+	},
+	"check": {
+        usage: "",
+        description: "these trips",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.check(msg,bot,true);
+		}
+	},
+	"call": {
+        usage: "",
+        description: "fold your hand",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.call(msg,bot,true);
+		}
+	},
+	"money": {
+        usage: "",
+        description: "find out how much dosh you have",
+        process: function(bot,msg){ 
+			poker_plugin.money(msg,bot,true);
+		}
+	},
+	"add": {
+        usage: "<player> <money>",
+        description: "add money to given player.",
+        process: function(bot,msg,suffix){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.add(suffix,bot,true);
+		}
+	},
+	"remove": {
+        usage: "<player> <money>",
+        description: "remove money from given player.",
+        process: function(bot,msg,suffix){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.remove(suffix,bot,true);
+		}
+	},
+	"leave": {
+        usage: "",
+        description: "removes you from a poker game",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.leave(msg,bot,true);
+		}
+	},
+	"pot": {
+        usage: "",
+        description: "gives you the current (total) pot size",
+        process: function(bot,msg){ 
+			bot.sendMessage(msg.author, "The pot size is $"+ poker_plugin.pot+".");
+		}
+	},		
+	"reinit": {
+        usage: "",
+        description: "resets poker bot",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin = new poker();
+			bot.sendMessage(msg.channel, "Poker game has been reset.")
+		}
+	},	
 	
-	
-	
-	
+	// End poker stuff
 	
 	
 	"goodshit": {
