@@ -19,6 +19,7 @@ function Poker () {
 	this.buyin = 0;
 	this.activeChannel = null;
 	this.players_left = 0;
+	this.first_player = null;
 };
 
 function Card (rank, suit) {
@@ -106,17 +107,17 @@ Poker.prototype.cardShow = function (msg,bot,type){
 				bot.sendMessage(msg.author, "Cards on table: " + cardToText(this.community[0]) + " " + cardToText(this.community[1]) + " " + cardToText(this.community[2]));
 				break;
 			case 2:
-				bot.sendMessage(msg.author, "Cards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]));
+				bot.sendMessage(msg.author, "Cards on table: " + cardToText(this.community[0]) + " " + cardToText(this.community[1]) + " " + cardToText(this.community[2]) + " " + cardToText(this.community[3]));
 				break;
 			case 3:
-				bot.sendMessage(msg.author, "Cards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]) + " " + cardToText(poker.community[4]));
+				bot.sendMessage(msg.author, "Cards on table: " + cardToText(this.community[0]) + " " + cardToText(this.community[1]) + " " + cardToText(this.community[2]) + " " + cardToText(this.community[3]) + " " + cardToText(this.community[4]));
 				break;
 		}
 	} else if (type == "player_hand") {
 		var i;
 		for (i=0; i < this.players.length; i++) {
 			if (msg.author.username === this.players[i].user.username) {
-				bot.sendMessage(poker.players[i].user, "["+poker.hand+"] Your hand is: " + card1 + " " + card2 +".");
+				bot.sendMessage(this.players[i].user, "["+this.hand+"] Your hand is: " + cardToText(this.players[i].hand[0]) + " " + cardToText(this.players[i].hand[1]) +".");
 				return;
 			}
 		}
@@ -131,8 +132,7 @@ Poker.prototype.checkBet = function(msg, bot) {
 	
 	for (i=0; i < this.players.length; i++) {
 		if (msg.author.username === this.players[i].user.username) {
-			bot.sendMessage(msg.author, "The current bet is $"+ this_plugin.pot+".");
-			bot.sendMessage(this.players[i].user, "Your current bet is $" +this.playesr[i].bet + ".");
+			bot.sendMessage(msg.author, "The current bet is $"+ this.pot+".\n" + "Your current bet is $" +this.players[i].bet + ".");
 			return;
 		}
 	}
@@ -217,10 +217,9 @@ Poker.prototype.new = function (query, msg, bot) {
 	this.deck.makeDeck();
 	this.game = true;
 	this.activeChannel = msg.channel;
-	bot.sendMessage(msg.channel, msg.author+" has started a Texas hold 'em with a buy in of $"+ num +"!");
+	
 	this.buyin = num;
-	bot.sendMessage(msg.channel, "Small blinds will start at 25, and big blinds at 50.");
-	bot.sendMessage(msg.channel, "Message !join into the chat to join the game (maximum 8 players).");
+	bot.sendMessage(msg.channel, msg.author+" has started a Texas hold 'em with a buy in of $"+ num +"!\n" + "Small blinds will start at 25, and big blinds at 50.\n" + "Message !join into the chat to join the game (maximum 8 players).");
 };
 
 Poker.prototype.join = function (query, msg, bot) {
@@ -318,6 +317,7 @@ Poker.prototype.opening =  function (msg, bot) {
 	} else {
 		this.small = this.big - 1;
 	}
+	sleep(300);
 	bot.sendMessage(msg.channel, this.players[this.big].user +" starts off with the big blind. "+this.players[this.small].user+" starts off with the small blind.");
 	//Money deducted from players and added to pot
 	this.players[this.big].money -= this.bigblind;
@@ -325,9 +325,10 @@ Poker.prototype.opening =  function (msg, bot) {
 	this.players[this.small].money -= this.smallblind;
 	this.players[this.small].bet = this.smallblind
 	this.pot = this.pot + this.bigblind + this.smallblind;
-	
+	sleep(400);
 	bot.sendMessage(msg.channel, this.players[(this.big+1)%this.players.length].user+" to act first.");
 	this.current_player = (this.big+1)%this.players.length;
+	this.first_player = this.current_player;
 	this.bet = this.bigblind;
 	this.players_left = this.players.length;
 }
@@ -364,11 +365,12 @@ Poker.prototype.raise = function (query, msg, bot) {
 	//Finds next player to the right in array to pass turn
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
-		this.current_player = (this.current_player+1)%this.players.length;
+			this.current_player = (this.current_player+1)%this.players.length;
 	}
 	if (endOfRoundCheck(this,bot) === true) {
 		return;
 	}
+	sleep(500);
 	bot.sendMessage(msg.channel, this.players[this.current_player].user +" to act.");
 }	
 
@@ -399,11 +401,15 @@ Poker.prototype.fold = function (msg,bot) {
 	//Finds next player to the right in array to pass turn
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
-		this.current_player = (this.current_player+1)%this.players.length;
+			this.current_player = (this.current_player+1)%this.players.length;
 	}
+	console.log("Fold: before endofRoundCheck")
 	if (endOfRoundCheck(this,bot) === true) {
+			console.log("Fold: after endofRoundCheck")
 		return;
 	}
+	console.log("Fold: skip endofRoundCheck")
+	sleep(500);
 	bot.sendMessage(msg.channel, this.players[this.current_player].user +" to act.");
 }
 
@@ -425,14 +431,17 @@ Poker.prototype.check = function (msg,bot) {
 	bot.sendMessage(msg.channel, msg.author + " has checked.");
 	this.players[this.current_player].last_move = "check";
 	//Finds next player etc.
+//	this.current_player = (this.current_player+1)%this.players.length;
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
-		this.current_player = (this.current_player+1)%this.players.length;
+			this.current_player = (this.current_player+1)%this.players.length;
 	}
 	if (endOfRoundCheck(this,bot) === true) {
 		return;
 	}
+	sleep(500);
 	bot.sendMessage(msg.channel, this.players[this.current_player].user +" to act.");
+	
 }
 
 Poker.prototype.call = function (msg,bot) {
@@ -464,98 +473,140 @@ Poker.prototype.call = function (msg,bot) {
 	}
 	this.players[this.current_player].last_move = "call";
 	//Finds next player etc.
+//	this.current_player = (this.current_player+1)%this.players.length;
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
-		this.current_player = (this.current_player+1)%this.players.length;
+			this.current_player = (this.current_player+1)%this.players.length;
 	}
 	if (endOfRoundCheck(this,bot) === true) {
 		return;
 	}
+	sleep(500);
 	bot.sendMessage(msg.channel, this.players[this.current_player].user +" to act.");
 }
 
 
 function endOfRoundCheck (poker,bot) {
 	if (poker.players[poker.current_player].bet == poker.bet && poker.players[poker.current_player].last_move != null) {
+		console.log("EORC: true")
 		nextRound(poker,bot);
 		return true;
 	} else {
+		console.log("EORC: false")
 		return false;
 	}
 }	
+function sleep(miliseconds) {
+    var currentTime = new Date().getTime();
 
+    while (currentTime + miliseconds >= new Date().getTime()) {
+    }
+ }
 	
 function nextRound(poker,bot) {
 	//from preflop to flop
 	var i = 0;
+	var players_active = 0;
+	console.log("nextRound")
+	sleep(500);
 	if (poker.round === 0) {
-		bot.sendMessage(poker.activeChannel, "Preflop round has ended. Now dealing flop.");
 		var card1 = poker.deck.deal();
 		var card2 = poker.deck.deal();
 		var card3 = poker.deck.deal();
 		poker.community.push (card1);
 		poker.community.push (card2);
 		poker.community.push (card3);
-		bot.sendMessage(poker.activeChannel, "Cards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]));
+		
 		for (i=0; i < poker.players.length; i++){
 			poker.players[i].last_move = null;
+			if (poker.players[i].money > 0){
+				players_active++;
+			}
+		}
+		poker.current_player = poker.first_player;
+		if (players_active < 2) {
+			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
+			nextRound(poker,bot);
 		}
         while (poker.players[poker.current_player].fold == true || poker.players[poker.current_player].money <= 0) {
-			poker.current_player = (poker.current_player+1)%poker.players.length;
+			poker.current_player = (poker.current_player+1)%poker.players.length;	
 		}
+		bot.sendMessage(poker.activeChannel, "Preflop round has ended. Now dealing flop.\nCards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]));
+		sleep(400);
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
 		poker.round++;
 		return;
 	} 
 	//from flop to river
 	else if (poker.round === 1) {
-		bot.sendMessage(poker.activeChannel, "Flop round has ended. Now dealing river.");
 		var card4 = poker.deck.deal();
 		poker.community.push (card4);
-		bot.sendMessage(poker.activeChannel, "Cards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]));
+		
 		for (i=0; i < poker.players.length; i++){
 			poker.players[i].last_move = null;
+			if (poker.players[i].money > 0){
+				players_active++;
+			}
+		}
+		poker.current_player = poker.first_player;
+		if (players_active < 2) {
+			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
+			nextRound(poker,bot);
 		}
 		while (poker.players[poker.current_player].fold == true || poker.players[poker.current_player].money <= 0) {
 			poker.current_player = (poker.current_player+1)%poker.players.length;
 		}
+		bot.sendMessage(poker.activeChannel, "Flop round has ended. Now dealing turn.\nCards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]));
+		sleep(400);
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
 		poker.round++;
 		return;
 	}
 	//from river to turn
 	else if (poker.round === 2) {
-		bot.sendMessage(poker.activeChannel, "River round has ended. Now dealing turn.");
 		var card5 = poker.deck.deal();
 		poker.community.push (card5);
-		bot.sendMessage(poker.activeChannel, "Cards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]) + " " + cardToText(poker.community[4]));
-		for (i=0; i < poker.players.length; i++){
+				for (i=0; i < poker.players.length; i++){
 			poker.players[i].last_move = null;
+			if (poker.players[i].money > 0){
+				players_active++;
+			}
+		}
+		poker.current_player = poker.first_player;
+		if (players_active < 2) {
+			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
+			nextRound(poker,bot);
 		}
 		while (poker.players[poker.current_player].fold == true || poker.players[poker.current_player].money <= 0) {
 			poker.current_player = (poker.current_player+1)%poker.players.length;
 		}
+		bot.sendMessage(poker.activeChannel, "River round has ended. Now dealing river.\nCards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]) + " " + cardToText(poker.community[4]));
+		sleep(400);
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
 		poker.round++;
 		return;
 	}
 	//from turn to reveal
 	else if (poker.round === 3) {
-		bot.sendMessage(poker.activeChannel, "Betting has ended. Now revealing cards.");
-		bot.sendMessage(poker.activeChannel, "Cards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]) + " " + cardToText(poker.community[4]));
+		console.log("nextRound: Revealing cards")
+		bot.sendMessage(poker.activeChannel, "Betting has ended. Now revealing cards.\n" + "Cards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]) + " " + cardToText(poker.community[4]));
 		for (i=0; i < poker.players.length; i++)
 		{ //Presents everyone's hands.
+		console.log("nextRound: inside revealing for loop")
 			if (poker.players[i].fold == false){
+				console.log("nextRound: Revealing a player's cards")
 				poker.players[i].handResult = PokerEvaluator.evalHand([String(cardToEval(poker.community[0])), String(cardToEval(poker.community[1])), String(cardToEval(poker.community[2])), String(cardToEval(poker.community[3])), String(cardToEval(poker.community[4])), String(cardToEval(poker.players[i].hand[0])), String(cardToEval(poker.players[i].hand[1]))]);
 				bot.sendMessage(poker.activeChannel, poker.players[i].user + " has: " + cardToText(poker.players[i].hand[0]) + " " + cardToText(poker.players[i].hand[1]) +"." + " A " + poker.players[i].handResult.handName+".");
 			}
 		}
+		console.log("nextRound: before endRound")
 		endRound(findWinner(poker),poker,bot);
 		return;
 	}
 }
 
 function findWinner (poker){
+	console.log("inside finding winner")
 	var bestHand = 0;
 	var i = 0;
 	while (poker.players[i].fold == true) {
@@ -570,12 +621,15 @@ function findWinner (poker){
 			}
 		}
 	}
+	console.log("returning from finding winner")
 	return bestHand;
 }
 
 function endRound (winner, poker, bot){
 	var i;
+	console.log("in endRound")
 	if (poker.players[winner].side_pot_ineligible == false) {
+		console.log("in endRound, side pot false")
 		bot.sendMessage(poker.activeChannel, poker.players[winner].user+ " wins the hand! The pot of $" + poker.pot + " is added to their stack.");
 		poker.players[winner].money += poker.pot;
 	} else {
@@ -600,12 +654,13 @@ function endRound (winner, poker, bot){
 			poker.players[side_winner].money += side_pot;
 		}
 	}
+	console.log("before nextHand")
 	nextHand(poker,bot);
 }
 
 function nextHand(poker,bot){
 	var i,j;
-	
+	console.log("in nextHand")
 	poker.deck = new Deck();
 	poker.deck.makeDeck();
 	poker.deck.shuffle();
@@ -621,12 +676,12 @@ function nextHand(poker,bot){
 		poker.players[i].last_move = null;
 		poker.players[i].side_pot_ineligible = false;
 	}
-	bot.sendMessage(poker.activeChannel, "Hand has been complete. Dealing new round.");
+
 	poker.community.length = 0;
 	poker.hand++;
 	poker.round = 0;
 	poker.pot = 0;
-
+console.log("before dealing cards");
 	for (i=0; i < 2; i++){
 		for (j=0; j < poker.players.length; j++){
 			poker.players[j].hand.push(poker.deck.deal());
@@ -637,11 +692,12 @@ function nextHand(poker,bot){
 		var card2 = cardToText(poker.players[j].hand[1]);
 		bot.sendMessage(poker.players[j].user, "["+poker.hand+"] Your hand is: " + card1 + " " + card2 +".");
 	};
-	
+	console.log("after dealing");
 	poker.big = (poker.big + 1) % poker.players.length;
 	poker.small = (poker.small + 1) % poker.players.length;
 	bot.sendMessage(poker.activeChannel, poker.players[poker.big].user +" now has the big blind. "+poker.players[poker.small].user+" now has the small blind.");
 	//Money deducted from players and added to pot
+	console.log("before money deduction")
 	if (poker.players[poker.big].money < poker.bigblind){
 		poker.players[poker.big].bet += poker.players[poker.big].money;
 		poker.pot += poker.players[poker.big].money;
@@ -651,7 +707,7 @@ function nextHand(poker,bot){
     } else  {
 		poker.players[poker.big].money -= poker.bigblind;
 		poker.players[poker.big].bet = poker.bigblind;
-		poker.pot = poker.pot + poker.bigblind + poker.smallblind;
+		poker.pot = poker.pot + poker.bigblind;
 	}
 	
 	if (poker.players[poker.small].money < poker.smallblind){
@@ -661,17 +717,15 @@ function nextHand(poker,bot){
 		poker.players[poker.small].side_pot_ineligible = true;
 		bot.sendMessage(msg.channel, poker.players[poker.small].user + " has insufficient money for the small blind. A side pot has been created.");
     } else  {
-		poker.players[poker.big].money -= poker.bigblind;
-		poker.players[poker.big].bet = poker.bigblind;
-		poker.pot = poker.pot + poker.bigblind + poker.smallblind;
+		poker.players[poker.small].money -= poker.smallblind;
+		poker.players[poker.small].bet = poker.smallblind
+		poker.pot = poker.pot + poker.smallblind;
 	}
-	
-	poker.players[poker.small].money -= poker.smallblind;
-	poker.players[poker.small].bet = poker.smallblind
-	
-	
-	bot.sendMessage(poker.activeChannel, poker.players[(poker.big+1)%poker.players.length].user+" to act first.");
+	console.log("after money duction")
+	sleep(400);
+	bot.sendMessage(poker.activeChannel, "Hand has been complete. Dealing new round.\n" + poker.players[(poker.big+1)%poker.players.length].user+" to act first.");
 	poker.current_player = (poker.big+1)%poker.players.length;
+	poker.first_player = poker.current_player;
 	poker.bet = poker.bigblind;
 	poker.players_left = poker.players.length;
 	

@@ -291,7 +291,7 @@ var commands = {
         usage: "",
         description: "messages you the current bet",
         process: function(bot,msg){ 
-			poker_plugin.checkbet(msg,bot,true);;
+			poker_plugin.checkBet(msg,bot,true);;
 		}
 	},		
 	"reinit": {
