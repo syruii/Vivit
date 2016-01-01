@@ -265,8 +265,33 @@ var commands = {
 	"pot": {
         usage: "",
         description: "gives you the current (total) pot size",
-        process: function(bot,msg){ 
+        process: function(bot,msg){
+		if (poker_plugin.game != 'session') {
+			bot.sendMessage(msg.author, "A game is not in session.");
+			return;
+		}					
 			bot.sendMessage(msg.author, "The pot size is $"+ poker_plugin.pot+".");
+		}
+	},
+	"hand": {
+        usage: "",
+        description: "messages you your hand again",
+        process: function(bot,msg){ 
+			poker_plugin.cardShow(msg,bot,"player_hand",true);
+		}
+	},	
+	"table": {
+        usage: "",
+        description: "messages you the current cards on the table",
+        process: function(bot,msg){
+			poker_plugin.cardShow(msg,bot,"community",true);
+		}
+	},
+	"bet": {
+        usage: "",
+        description: "messages you the current bet",
+        process: function(bot,msg){ 
+			poker_plugin.checkbet(msg,bot,true);;
 		}
 	},		
 	"reinit": {
