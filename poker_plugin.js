@@ -92,6 +92,52 @@ Poker.prototype.money = function (msg, bot) {
 		bot.sendMessage(msg.author, this.players[i].user + " currently has $" + money +" on hand and $" + bet +" in the pot.");
 	}	
 }
+Poker.prototype.cardShow = function (msg,bot,type){
+	if (this.game != 'session') {
+		bot.sendMessage(msg.author, "A game is not in session.");
+		return;
+	}
+	if (type == "community") {
+		switch (this.round) {
+			case 0:
+				bot.sendMessage(msg.author, "There are no cards on the table preflop.")
+				break;
+			case 1:
+				bot.sendMessage(msg.author, "Cards on table: " + cardToText(this.community[0]) + " " + cardToText(this.community[1]) + " " + cardToText(this.community[2]));
+				break;
+			case 2:
+				bot.sendMessage(msg.author, "Cards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]));
+				break;
+			case 3:
+				bot.sendMessage(msg.author, "Cards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]) + " " + cardToText(poker.community[4]));
+				break;
+		}
+	} else if (type == "player_hand") {
+		var i;
+		for (i=0; i < this.players.length; i++) {
+			if (msg.author.username === this.players[i].user.username) {
+				bot.sendMessage(poker.players[i].user, "["+poker.hand+"] Your hand is: " + card1 + " " + card2 +".");
+				return;
+			}
+		}
+		bot.sendMessage(msg.author, "You are not currently in the game.")
+	}
+}
+Poker.prototype.checkBet = function(msg, bot) {
+	if (this.game != 'session') {
+		bot.sendMessage(msg.author, "A game is not in session.");
+		return;
+	}
+	
+	for (i=0; i < this.players.length; i++) {
+		if (msg.author.username === this.players[i].user.username) {
+			bot.sendMessage(msg.author, "The current bet is $"+ this_plugin.pot+".");
+			bot.sendMessage(this.players[i].user, "Your current bet is $" +this.playesr[i].bet + ".");
+			return;
+		}
+	}
+	bot.sendMessage(msg.author, "You are not currently in the game.")
+}
 
 Poker.prototype.add = function (query, bot) {
 	var i;
