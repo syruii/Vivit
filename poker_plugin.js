@@ -337,14 +337,14 @@ Poker.prototype.fold = function (msg,bot) {
 	this.players_left--;
 	this.players[this.current_player].last_move = "fold";
 	if (this.players_left == 1) {
-		var winner;
+		var winner,i;
 		for (i=0; i < this.players.length; i++) {
 			if (this.players[i].fold == false){
 				winner = i;
 				endRound(winner,this,bot);
+				return;
 			}			
 		}
-		return;
 	}
 	//Finds next player to the right in array to pass turn
 	this.current_player = (this.current_player+1)%this.players.length;
