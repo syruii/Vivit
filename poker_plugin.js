@@ -185,6 +185,10 @@ Poker.prototype.leave = function (msg, bot) {
 		bot.sendMessage(msg.channel, "A game is not in session.");
 		return;
 	}
+	if (msg.author.username == this.players[this.current_player].user.username) {
+		bot.sendMessage(msg.author, "You cannot leave the table while it is your turn.");
+		return;
+	}
 	for (i=0; i < this.players.length; i++) {
 		if (this.players[i].user.username == msg.author) {
 			this.players.splice(i,1);
