@@ -535,9 +535,8 @@ function nextRound(poker,bot) {
 		sleep(400);
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
 		poker.round++;
-		return;
 	} 
-	//from flop to river
+	//from flop to turn
 	else if (poker.round === 1) {
 		var card4 = poker.deck.deal();
 		poker.community.push (card4);
@@ -560,9 +559,8 @@ function nextRound(poker,bot) {
 		sleep(400);
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
 		poker.round++;
-		return;
 	}
-	//from river to turn
+	//from river to river
 	else if (poker.round === 2) {
 		var card5 = poker.deck.deal();
 		poker.community.push (card5);
@@ -584,7 +582,6 @@ function nextRound(poker,bot) {
 		sleep(400);
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
 		poker.round++;
-		return;
 	}
 	//from turn to reveal
 	else if (poker.round === 3) {
@@ -601,7 +598,6 @@ function nextRound(poker,bot) {
 		}
 		console.log("nextRound: before endRound")
 		endRound(findWinner(poker),poker,bot);
-		return;
 	}
 }
 
