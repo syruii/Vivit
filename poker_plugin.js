@@ -1,6 +1,7 @@
 var util = require('util');
 var winston = require('winston');
 var PokerEvaluator = require("poker-evaluator");
+//Removed sidebet functionality - unsure of problems, will reimplement when there's spare time during sem.
 
 function Poker () {
 	this.game = false;
@@ -242,7 +243,7 @@ Poker.prototype.join = function (query, msg, bot) {
 		'fold' : false,
 		'bet' : 0,
 		'last_move' : null,
-		'side_pot_ineligible' : false,
+		//'side_pot_ineligible' : false,
 		'money': 0,
 		'handResult' : null,
 	}
@@ -463,8 +464,8 @@ Poker.prototype.call = function (msg,bot) {
 		this.players[this.current_player].bet += this.players[this.current_player].money;
 		this.pot += this.players[this.current_player].money;
 		this.players[this.current_player].money = 0;
-		this.players[this.current_player].side_pot_ineligible = true;
-		bot.sendMessage(msg.channel, msg.author + " calls the bet of $" + this.bet +". A side pot has been created.");
+		//this.players[this.current_player].side_pot_ineligible = true;
+		bot.sendMessage(msg.channel, msg.author + " calls the bet of $" + this.bet +". A side pot should be created.");
 	} else {
 		this.players[this.current_player].money = this.players[this.current_player].money - (this.bet - this.players[this.current_player].bet);
 		this.pot = this.pot + (this.bet - this.players[this.current_player].bet);
@@ -624,10 +625,11 @@ function findWinner (poker){
 function endRound (winner, poker, bot){
 	var i;
 	console.log("in endRound")
-	if (poker.players[winner].side_pot_ineligible == false) {
+	//if (poker.players[winner].side_pot_ineligible == false) {
 		console.log("in endRound, side pot false")
-		bot.sendMessage(poker.activeChannel, poker.players[winner].user+ " wins the hand! The pot of $" + poker.pot + " is added to their stack.");
+		bot.sendMessage(poker.activeChannel, poker.players[winner].user+ " wins the hand! The pot of $" + poker.pot + " is added to their stack. Please sort out side pot yourself.");
 		poker.players[winner].money += poker.pot;
+	/*
 	} else {
 		var main_pot = 0;
 		for (i=0; i < poker.players.length; i++) {
@@ -650,6 +652,7 @@ function endRound (winner, poker, bot){
 			poker.players[side_winner].money += side_pot;
 		}
 	}
+	*/
 	console.log("before nextHand")
 	nextHand(poker,bot);
 }
@@ -670,7 +673,7 @@ function nextHand(poker,bot){
 		poker.players[i].fold = false;
 		poker.players[i].bet = 0;
 		poker.players[i].last_move = null;
-		poker.players[i].side_pot_ineligible = false;
+		//poker.players[i].side_pot_ineligible = false;
 	}
 
 	poker.community.length = 0;
@@ -698,8 +701,8 @@ console.log("before dealing cards");
 		poker.players[poker.big].bet += poker.players[poker.big].money;
 		poker.pot += poker.players[poker.big].money;
 		poker.players[poker.big].money = 0;
-		poker.players[poker.big].side_pot_ineligible = true;
-		bot.sendMessage(msg.channel, poker.players[poker.big].user + " has insufficient money for the big blind. A side pot has been created.");
+		//poker.players[poker.big].side_pot_ineligible = true;
+		bot.sendMessage(msg.channel, poker.players[poker.big].user + " has insufficient money for the big blind. A side pot should be created.");
     } else  {
 		poker.players[poker.big].money -= poker.bigblind;
 		poker.players[poker.big].bet = poker.bigblind;
@@ -710,8 +713,8 @@ console.log("before dealing cards");
 		poker.players[poker.small].bet += poker.players[poker.small].money;
 		poker.pot += poker.players[poker.small].money;
 		poker.players[poker.small].money = 0;
-		poker.players[poker.small].side_pot_ineligible = true;
-		bot.sendMessage(msg.channel, poker.players[poker.small].user + " has insufficient money for the small blind. A side pot has been created.");
+		//poker.players[poker.small].side_pot_ineligible = true;
+		bot.sendMessage(msg.channel, poker.players[poker.small].user + " has insufficient money for the small blind. A side pot should be created.");
     } else  {
 		poker.players[poker.small].money -= poker.smallblind;
 		poker.players[poker.small].bet = poker.smallblind
