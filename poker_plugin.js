@@ -370,7 +370,7 @@ Poker.prototype.raise = function (query, msg, bot) {
 			this.current_player = (this.current_player+1)%this.players.length;
 			if (loopcount > this.players.length){
 				bot.sendMessage(msg.channel, "No one else had any money though, so there was no point.");
-				continue;
+				break;
 			}
 	}
 	if (endOfRoundCheck(this,bot) === true) {
@@ -410,7 +410,7 @@ Poker.prototype.fold = function (msg,bot) {
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 			this.current_player = (this.current_player+1)%this.players.length;
 			if (loopcount > this.players.length){
-				continue;
+				break;
 			}
 	}
 	console.log("Fold: before endofRoundCheck")
@@ -448,7 +448,7 @@ Poker.prototype.check = function (msg,bot) {
 			this.current_player = (this.current_player+1)%this.players.length;
 			loopcount++;
 			if (loopcount > this.players.length){
-				continue;
+				break;
 			}
 	}
 	if (endOfRoundCheck(this,bot) === true) {
@@ -496,7 +496,7 @@ Poker.prototype.call = function (msg,bot) {
 			this.current_player = (this.current_player+1)%this.players.length;
 			loopcount++;
 			if (loopcount > this.players.length){
-				continue;
+				break;
 			}
 	}
 	if (endOfRoundCheck(this,bot) === true) {
