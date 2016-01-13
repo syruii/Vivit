@@ -357,6 +357,7 @@ Poker.prototype.raise = function (query, msg, bot) {
 		return;
 	}
 	this.bet += num;
+	var loopcount = 0;
 	//Raises bet by query amount, and deducts from money ana adds to pot
 	this.players[this.current_player].money -= this.bet - this.players[this.current_player].bet;
 	this.players[this.current_player].bet = this.bet;
@@ -367,6 +368,10 @@ Poker.prototype.raise = function (query, msg, bot) {
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 			this.current_player = (this.current_player+1)%this.players.length;
+			if (loopcount > this.players.length){
+				bot.sendMessage(msg.channel, "No one else had any money though, so there was no point.");
+				continue;
+			}
 	}
 	if (endOfRoundCheck(this,bot) === true) {
 		return;
@@ -384,6 +389,7 @@ Poker.prototype.fold = function (msg,bot) {
 		bot.sendMessage(msg.author, "It is not your turn to act.");
 		return;
 	}
+	var loopcount = 0;
 	bot.sendMessage(msg.channel, msg.author + " has folded.");
 	//Changes player to folded, removes players from players left active
 	this.players[this.current_player].fold = true;
@@ -403,6 +409,9 @@ Poker.prototype.fold = function (msg,bot) {
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 			this.current_player = (this.current_player+1)%this.players.length;
+			if (loopcount > this.players.length){
+				continue;
+			}
 	}
 	console.log("Fold: before endofRoundCheck")
 	if (endOfRoundCheck(this,bot) === true) {
@@ -429,6 +438,7 @@ Poker.prototype.check = function (msg,bot) {
 		console.log(this.bet);
 		return;
 	}
+	var loopcount = 0;
 	bot.sendMessage(msg.channel, msg.author + " has checked.");
 	this.players[this.current_player].last_move = "check";
 	//Finds next player etc.
@@ -436,6 +446,10 @@ Poker.prototype.check = function (msg,bot) {
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 			this.current_player = (this.current_player+1)%this.players.length;
+			loopcount++;
+			if (loopcount > this.players.length){
+				continue;
+			}
 	}
 	if (endOfRoundCheck(this,bot) === true) {
 		return;
@@ -458,6 +472,7 @@ Poker.prototype.call = function (msg,bot) {
 		this.check(msg,bot);
 		return;
 	}
+	var loopcount = 0;
 	//Sets player's current bet to the current round bet, and deducts difference from money and adds to pot
 	if (this.players[this.current_player].money - (this.bet - this.players[this.current_player].bet) <= 0) {
 		//sidepot created
@@ -472,12 +487,17 @@ Poker.prototype.call = function (msg,bot) {
 		this.players[this.current_player].bet = this.bet;
 		bot.sendMessage(msg.channel, msg.author + " calls the bet of $" + this.bet +".");
 	}
+	console.log("bet passed")
 	this.players[this.current_player].last_move = "call";
 	//Finds next player etc.
 //	this.current_player = (this.current_player+1)%this.players.length;
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 			this.current_player = (this.current_player+1)%this.players.length;
+			loopcount++;
+			if (loopcount > this.players.length){
+				continue;
+			}
 	}
 	if (endOfRoundCheck(this,bot) === true) {
 		return;
