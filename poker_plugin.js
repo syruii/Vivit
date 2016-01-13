@@ -544,6 +544,7 @@ function nextRound(poker,bot) {
 				players_active++;
 			}
 		}
+		poker.round++;
 		poker.current_player = poker.first_player;
 		if (players_active < 2) {
 			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
@@ -555,13 +556,12 @@ function nextRound(poker,bot) {
 		bot.sendMessage(poker.activeChannel, "Preflop round has ended. Now dealing flop.\nCards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]));
 		sleep(400);
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
-		poker.round++;
+
 	} 
 	//from flop to turn
 	else if (poker.round === 1) {
 		var card4 = poker.deck.deal();
 		poker.community.push (card4);
-		
 		for (i=0; i < poker.players.length; i++){
 			poker.players[i].last_move = null;
 			if (poker.players[i].money > 0){
@@ -569,6 +569,7 @@ function nextRound(poker,bot) {
 			}
 		}
 		poker.current_player = poker.first_player;
+		poker.round++;
 		if (players_active < 2) {
 			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
 			nextRound(poker,bot);
@@ -579,7 +580,6 @@ function nextRound(poker,bot) {
 		bot.sendMessage(poker.activeChannel, "Flop round has ended. Now dealing turn.\nCards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]));
 		sleep(400);
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
-		poker.round++;
 	}
 	//from river to river
 	else if (poker.round === 2) {
@@ -592,6 +592,7 @@ function nextRound(poker,bot) {
 			}
 		}
 		poker.current_player = poker.first_player;
+		poker.round++;
 		if (players_active < 2) {
 			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
 			nextRound(poker,bot);
