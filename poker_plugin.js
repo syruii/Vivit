@@ -549,6 +549,7 @@ function nextRound(poker,bot) {
 		if (players_active < 2) {
 			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
 			nextRound(poker,bot);
+			return;
 		}
         while (poker.players[poker.current_player].fold == true || poker.players[poker.current_player].money <= 0) {
 			poker.current_player = (poker.current_player+1)%poker.players.length;	
@@ -573,6 +574,7 @@ function nextRound(poker,bot) {
 		if (players_active < 2) {
 			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
 			nextRound(poker,bot);
+			return;
 		}
 		while (poker.players[poker.current_player].fold == true || poker.players[poker.current_player].money <= 0) {
 			poker.current_player = (poker.current_player+1)%poker.players.length;
@@ -596,6 +598,7 @@ function nextRound(poker,bot) {
 		if (players_active < 2) {
 			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
 			nextRound(poker,bot);
+			return;
 		}
 		while (poker.players[poker.current_player].fold == true || poker.players[poker.current_player].money <= 0) {
 			poker.current_player = (poker.current_player+1)%poker.players.length;
