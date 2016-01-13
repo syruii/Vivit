@@ -603,7 +603,6 @@ function nextRound(poker,bot) {
 		bot.sendMessage(poker.activeChannel, "River round has ended. Now dealing river.\nCards on table: " + cardToText(poker.community[0]) + " " + cardToText(poker.community[1]) + " " + cardToText(poker.community[2]) + " " + cardToText(poker.community[3]) + " " + cardToText(poker.community[4]));
 		sleep(400);
 		bot.sendMessage(poker.activeChannel, poker.players[poker.current_player].user+" to act first.");
-		poker.round++;
 	}
 	//from turn to reveal
 	else if (poker.round === 3) {
