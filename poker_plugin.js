@@ -547,7 +547,6 @@ function nextRound(poker,bot) {
 		poker.round++;
 		poker.current_player = poker.first_player;
 		if (players_active < 2) {
-			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
 			nextRound(poker,bot);
 			return;
 		}
@@ -572,7 +571,6 @@ function nextRound(poker,bot) {
 		poker.current_player = poker.first_player;
 		poker.round++;
 		if (players_active < 2) {
-			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
 			nextRound(poker,bot);
 			return;
 		}
@@ -596,7 +594,6 @@ function nextRound(poker,bot) {
 		poker.current_player = poker.first_player;
 		poker.round++;
 		if (players_active < 2) {
-			bot.sendMessage(poker.activeChannel, "Less than two players can take action, moving to next round.");
 			nextRound(poker,bot);
 			return;
 		}
