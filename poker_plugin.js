@@ -695,6 +695,11 @@ function nextHand(poker,bot){
 		poker.players[i].last_move = null;
 		//poker.players[i].side_pot_ineligible = false;
 	}
+	if (poker.players.length < 2) {
+		bot.sendMessage(poker.activeChannel, poker.players[0].user + " has won. Game is now finished.");
+		poker.game = false;
+		return;
+	}
 
 	poker.community.length = 0;
 	poker.hand++;
