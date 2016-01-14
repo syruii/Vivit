@@ -161,7 +161,8 @@ var commands = {
 	"poker": {
         usage: "<buy in>",
         description: "starts a new poker game",
-        process: function(bot,msg,suffix){ 
+        process: function(bot,msg,suffix){
+			poker_plugin = new poker();			
 			poker_plugin.new(suffix,msg,bot,true);
 		}
 	},
@@ -788,7 +789,7 @@ bot.on("message", function (msg) {
 		else if(cmd) {
             cmd.process(bot,msg,suffix);
 		} else {
-			bot.sendMessage(msg.channel, "Invalid command " + cmdTxt);
+			//other bots may use same delimiter
 		}
 	} else {
 		//message isn't a command or is from us
