@@ -19,7 +19,7 @@ WeatherPlugin.prototype.weather = function (query, channel, bot) {
 			console.log(error)
 			return;
 		}
-		if(!(data.hasOwnProperty('main')){
+		if(!(data.hasOwnProperty('main'))){
 			console.log("C")
 			bot.sendMessage(channel, "Error:\n" + data.message);
 		}
