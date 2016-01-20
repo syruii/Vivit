@@ -13,12 +13,15 @@ WeatherPlugin.prototype.weather = function (query, channel, bot) {
 	this.request(url, function(err, res, body) {
 		var data;
 		try {
+			console.log("A")
 			data = JSON.parse(body);
 		} catch (error) {
+			console.log("B")
 			console.log(error)
 			return;
 		}
 		if(!data.main){
+			console.log("C")
 			bot.sendMessage(channel, "Error:\n" + data.message);
 		}
 		else {
