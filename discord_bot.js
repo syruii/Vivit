@@ -132,8 +132,8 @@ var commands = {
         process: function(bot,msg){bot.sendMessage(msg.channel,msg.author.id);}
     },
 	"weather": {
-		usage: "<city>"
-		description: "fetches current weather for selected city"
+		usage: "<city>",
+		description: "fetches current weather for selected city",
 		process: function(bot,msg){weather_plugin.weather(suffix,msg.channgel,bot);}
 	},
     "idle": {
