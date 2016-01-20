@@ -24,6 +24,7 @@ WeatherPlugin.prototype.weather = function (query, channel, bot) {
 		else {
 			bot.sendMessage(channel, "**" + data.name + "**, " + data.sys.country + "\n" + data.weather.main +": " + data.weather.description + ".\n" + data.main.temp + "°C, max: " + data.main.temp_max + "°C, min: " + data.main.temp_min + ".\n" + "Wind speed of " + data.wind.speed + "m/s.");
 		}
+	};
 };
 
 WeatherPlugin.prototype.forecast = function (query, channel, bot) {
