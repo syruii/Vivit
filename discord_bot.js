@@ -134,7 +134,7 @@ var commands = {
 	"weather": {
 		usage: "<city>",
 		description: "fetches current weather for selected city",
-		process: function(bot,msg){weather_plugin.weather(suffix,msg.channgel,bot);}
+		process: function(bot,msg,suffix){weather_plugin.weather(suffix,msg.channgel,bot);}
 	},
     "idle": {
         description: "sets bot status to idle",
