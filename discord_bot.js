@@ -23,6 +23,10 @@ var poker_plugin = new poker();
 
 var danbooru = require("./danbooru_plugin");
 var danbooru_plugin = new danbooru();
+
+var weather = require("./weather_plugin");
+var weather_plugin =  new weather();
+
 // Get the email and password
 var AuthDetails = require("./auth.json");
 var qs = require("querystring");
@@ -127,6 +131,11 @@ var commands = {
         description: "returns the user id of the sender",
         process: function(bot,msg){bot.sendMessage(msg.channel,msg.author.id);}
     },
+	"weather": {
+		usage: "<city>"
+		description: "fetches current weather for selected city"
+		process: function(bot,msg){weather_plugin.weather(suffix,msg.channgel,bot);}
+	},
     "idle": {
         description: "sets bot status to idle",
         process: function(bot,msg){ bot.setStatusIdle();}
@@ -218,7 +227,7 @@ var commands = {
 	},
 	"call": {
         usage: "",
-        description: "fold your hand",
+        description: "call the current bet",
         process: function(bot,msg){ 
 			if (msg.channel != poker_plugin.activeChannel) {
 				return;
