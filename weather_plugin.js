@@ -3,9 +3,8 @@ var winston = require('winston');
 var AuthDetails = require("./auth.json");
 
 function WeatherPlugin () {
-	WeatherAPI = AuthDetails.open_weather_api_key
+	WeatherAPI = AuthDetails.open_weather_api_key;
 	this.request = require('request');
-	Date expiry = new Date(Long.parseLong(date) * 1000);
 };
 
 
