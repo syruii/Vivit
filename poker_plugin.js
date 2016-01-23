@@ -140,13 +140,13 @@ Poker.prototype.checkBet = function(msg, bot) {
 	bot.sendMessage(msg.author, "You are not currently in the game.")
 }
 
-Poker.prototype.add = function (query, bot) {
+Poker.prototype.add = function (msg, bot) {
 	var i;
 	if (this.game != 'session') {
 		bot.sendMessage(msg.channel, "A game is not in session.");
 		return;
 	}
-	var args = query.split(" ");
+	var args = msg.split(" ");
 	if (args.length < 2) {
 		bot.sendMessage(this.activeChannel,"Invalid arguments provided.");
 		return;
@@ -160,13 +160,13 @@ Poker.prototype.add = function (query, bot) {
 	}
 	bot.sendMessage(msg.author, "Player not found in this game.")
 }
-Poker.prototype.remove = function (query, bot) {
+Poker.prototype.remove = function (msg, bot) {
 	var i;
 	if (this.game == 'session') {
 		bot.sendMessage(msg.channel, "A game is not in session.");
 		return;
 	}
-	var args = query.split(" ");
+	var args = msg.split(" ");
 	if (args.length < 2) {
 		bot.sendMessage(this.activeChannel,"Invalid arguments provided.");
 		return;
