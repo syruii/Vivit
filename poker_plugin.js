@@ -728,7 +728,7 @@ console.log("before dealing cards");
 		poker.pot += poker.players[poker.big].money;
 		poker.players[poker.big].money = 0;
 		//poker.players[poker.big].side_pot_ineligible = true;
-		bot.sendMessage(msg.channel, poker.players[poker.big].user + " has insufficient money for the big blind. A side pot should be created.");
+		bot.sendMessage(poker.activeChannel, poker.players[poker.big].user + " has insufficient money for the big blind. A side pot should be created.");
     } else  {
 		poker.players[poker.big].money -= poker.bigblind;
 		poker.players[poker.big].bet = poker.bigblind;
@@ -740,7 +740,7 @@ console.log("before dealing cards");
 		poker.pot += poker.players[poker.small].money;
 		poker.players[poker.small].money = 0;
 		//poker.players[poker.small].side_pot_ineligible = true;
-		bot.sendMessage(msg.channel, poker.players[poker.small].user + " has insufficient money for the small blind. A side pot should be created.");
+		bot.sendMessage(poker.activeChannel, poker.players[poker.small].user + " has insufficient money for the small blind. A side pot should be created.");
     } else  {
 		poker.players[poker.small].money -= poker.smallblind;
 		poker.players[poker.small].bet = poker.smallblind
