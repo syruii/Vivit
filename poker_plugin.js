@@ -628,6 +628,7 @@ function findWinner (poker){
 	var i = 0;
 	while (poker.players[i].fold == true) {
 		bestHand++;
+		i++;
 	}
 	for (i=0; i < poker.players.length; i++) {
 		if (poker.players[i].fold == false){
