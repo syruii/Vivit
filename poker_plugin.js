@@ -61,7 +61,6 @@ function shuffle() {
     // While there are elements in the array
     while (counter > 0) {
         // Pick a random index
-        index = Math.floor(Math.random() * counter);
 
         // Decrease counter by 1
         counter--;
@@ -360,8 +359,8 @@ Poker.prototype.raise = function (query, msg, bot) {
 	var loopcount = 0;
 	//Raises bet by query amount, and deducts from money ana adds to pot
 	this.players[this.current_player].money -= this.bet - this.players[this.current_player].bet;
+	this.pot += this.bet - this.players[this.current_player].bet;
 	this.players[this.current_player].bet = this.bet;
-	this.pot += num;
 	this.players[this.current_player].last_move = "raise";
 	bot.sendMessage(msg.channel, msg.author + " has raised by $" + num +". The total bet for the hand is $"+this.bet+".");
 	//Finds next player to the right in array to pass turn
@@ -687,9 +686,13 @@ function nextHand(poker,bot){
 	poker.deck.makeDeck();
 	poker.deck.shuffle();
 	for (i=0; i < poker.players.length; i++) {
+		if (poker.players[i].hand.length == 0){
+			continue;
+		}
 		if (poker.players[i].money < 1) {
 			bot.sendMessage(poker.activeChannel, poker.players[i].user + " has been eliminated.");
 			poker.players.splice(i,1);
+			i=0;
 			continue;
 		}
 		poker.players[i].hand.length = 0;
@@ -710,6 +713,7 @@ function nextHand(poker,bot){
 	poker.pot = 0;
 console.log("before dealing cards");
 	for (i=0; i < 2; i++){
+		poker.deck.shuffle();
 		for (j=0; j < poker.players.length; j++){
 			poker.players[j].hand.push(poker.deck.deal());
 		}
