@@ -368,6 +368,7 @@ Poker.prototype.raise = function (query, msg, bot) {
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 			this.current_player = (this.current_player+1)%this.players.length;
+			loopcount++;
 			if (loopcount > this.players.length){
 				bot.sendMessage(msg.channel, "No one else had any money though, so there was no point.");
 				break;
@@ -409,6 +410,7 @@ Poker.prototype.fold = function (msg,bot) {
 	this.current_player = (this.current_player+1)%this.players.length;
 	while (this.players[this.current_player].fold == true || this.players[this.current_player].money <= 0) {
 			this.current_player = (this.current_player+1)%this.players.length;
+			loopcount++;
 			if (loopcount > this.players.length){
 				break;
 			}
