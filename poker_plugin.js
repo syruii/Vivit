@@ -57,7 +57,7 @@ function makeDeck() {
 
 function shuffle() {
     var counter = this.deck.length, temp, index;
-
+	console.log("Shuffling");
     // While there are elements in the array
     while (counter > 0) {
         // Pick a random index
@@ -74,7 +74,7 @@ function shuffle() {
 
 
 function deal() {
-
+	console.log("Dealing");
     if (this.deck.length > 0) {
         return this.deck.shift();
     }
@@ -713,7 +713,6 @@ function nextHand(poker,bot){
 	poker.pot = 0;
 console.log("before dealing cards");
 	for (i=0; i < 2; i++){
-		poker.deck.shuffle();
 		for (j=0; j < poker.players.length; j++){
 			poker.players[j].hand.push(poker.deck.deal());
 		}
