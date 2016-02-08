@@ -60,7 +60,7 @@ function shuffle() {
     var counter = this.deck.length, temp, index;
 	console.log("Shuffling");
     // While there are elements in the array
-    while (counter > 0) {
+    while (0 !== counter) {
         // Pick a random index
 		index = Math.floor(Math.random() * counter);
         // Decrease counter by 1
