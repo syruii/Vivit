@@ -55,13 +55,14 @@ function makeDeck() {
     }
 };
 
+
 function shuffle() {
     var counter = this.deck.length, temp, index;
 	console.log("Shuffling");
     // While there are elements in the array
     while (counter > 0) {
         // Pick a random index
-
+		index = Math.floor(Math.random() * counter);
         // Decrease counter by 1
         counter--;
 
@@ -70,6 +71,7 @@ function shuffle() {
         this.deck[counter] = this.deck[index];
         this.deck[index] = temp;
     }
+}
 }
 
 
@@ -228,7 +230,7 @@ Poker.prototype.join = function (query, msg, bot) {
 		return;
 	}
 	var i;
-	//console.log(util.inspect(msg.author, {showHidden: false, depth: 4}));
+	//console.log(util.inspect(msg.author, {showHidden: false , depth: 4}));
 	for (i=0; i < this.players.length; i++){
 		if (this.players[i].user.username === msg.author.username) {
 			bot.sendMessage(msg.channel, msg.author+" is already in the game.");
