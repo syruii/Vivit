@@ -72,7 +72,6 @@ function shuffle() {
         this.deck[index] = temp;
     }
 }
-}
 
 
 function deal() {
