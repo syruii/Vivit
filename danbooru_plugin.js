@@ -11,7 +11,7 @@ DanbooruPlugin.prototype.respond = function (query, channel, bot) {
 	var args = query.split(" ");
 	var method = -1;
 	if (args.length === 1) {
-		bot.sendMessage(channel,"Please specify a <method> (Ex. !danbooru nsfw swimsuit cleavage)");
+		bot.sendMessage(channel,"Please specify a <method> (Ex. !danbooru sfw white_hair)");
 		return;
 	} else if (args[0] === 'nsfw') {
 		method = 0;
