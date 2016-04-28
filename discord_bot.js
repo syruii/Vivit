@@ -18,8 +18,15 @@ var wolfram_plugin = new wa();
 var dict = require("./dictionary_plugin");
 var dictionary_plugin = new dict();
 
+var poker = require("./poker_plugin.js");
+var poker_plugin = new poker();
+
 var danbooru = require("./danbooru_plugin");
 var danbooru_plugin = new danbooru();
+
+var weather = require("./weather_plugin");
+var weather_plugin =  new weather();
+
 // Get the email and password
 var AuthDetails = require("./auth.json");
 var qs = require("querystring");
@@ -124,6 +131,11 @@ var commands = {
         description: "returns the user id of the sender",
         process: function(bot,msg){bot.sendMessage(msg.channel,msg.author.id);}
     },
+	"weather": {
+		usage: "<city>",
+		description: "fetches current weather for selected city",
+		process: function(bot,msg,suffix){weather_plugin.weather(suffix,msg.channel,bot);}
+	},
     "idle": {
         description: "sets bot status to idle",
         process: function(bot,msg){ bot.setStatusIdle();}
@@ -153,6 +165,160 @@ var commands = {
 			bot.sendMessage(msg.channel,suffix,true);
 		}
 	},
+	
+	//Poker stuff
+	"poker": {
+        usage: "<buy in>",
+        description: "starts a new poker game",
+        process: function(bot,msg,suffix){
+			poker_plugin = new poker();			
+			poker_plugin.new(suffix,msg,bot,true);
+		}
+	},
+	"join": {
+        usage: "",
+        description: "joins a poker game in the recruitment phase",
+        process: function(bot,msg,suffix){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.join(suffix,msg,bot,true);
+		}
+	},
+	"start": {
+        usage: "",
+        description: "ends recruitment and begins poker game",
+        process: function(bot,msg,suffix){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.opening(msg,bot,true);
+		}
+	},
+	"raise": {
+        usage: "<amount>",
+        description: "bets/raises BY amount for current betting round (includes blinds)",
+        process: function(bot,msg,suffix){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.raise(suffix,msg,bot,true);
+		}
+	},
+	"fold": {
+        usage: "",
+        description: "fold your hand",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.fold(msg,bot,true);
+		}
+	},
+	"check": {
+        usage: "",
+        description: "these trips",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.check(msg,bot,true);
+		}
+	},
+	"call": {
+        usage: "",
+        description: "call the current bet",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.call(msg,bot,true);
+		}
+	},
+	"money": {
+        usage: "",
+        description: "find out how much dosh you have",
+        process: function(bot,msg){ 
+			poker_plugin.money(msg,bot,true);
+		}
+	},
+	"add": {
+        usage: "<player> <money>",
+        description: "add money to given player.",
+        process: function(bot,msg,suffix){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.add(suffix,bot,true);
+		}
+	},
+	"remove": {
+        usage: "<player> <money>",
+        description: "remove money from given player.",
+        process: function(bot,msg,suffix){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.remove(suffix,bot,true);
+		}
+	},
+	"leave": {
+        usage: "",
+        description: "removes you from a poker game",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin.leave(msg,bot,true);
+		}
+	},
+	"pot": {
+        usage: "",
+        description: "gives you the current (total) pot size",
+        process: function(bot,msg){
+		if (poker_plugin.game != 'session') {
+			bot.sendMessage(msg.author, "A game is not in session.");
+			return;
+		}					
+			bot.sendMessage(msg.author, "The pot size is $"+ poker_plugin.pot+".");
+		}
+	},
+	"hand": {
+        usage: "",
+        description: "messages you your hand again",
+        process: function(bot,msg){ 
+			poker_plugin.cardShow(msg,bot,"player_hand",true);
+		}
+	},	
+	"table": {
+        usage: "",
+        description: "messages you the current cards on the table",
+        process: function(bot,msg){
+			poker_plugin.cardShow(msg,bot,"community",true);
+		}
+	},
+	"bet": {
+        usage: "",
+        description: "messages you the current bet",
+        process: function(bot,msg){ 
+			poker_plugin.checkBet(msg,bot,true);;
+		}
+	},		
+	"reinit": {
+        usage: "",
+        description: "resets poker bot",
+        process: function(bot,msg){ 
+			if (msg.channel != poker_plugin.activeChannel) {
+				return;
+			}
+			poker_plugin = new poker();
+			bot.sendMessage(msg.channel, "Poker game has been reset.")
+		}
+	},	
+	
+	// End poker stuff
+	
+	
 	"goodshit": {
         description: 	"thats some good shit",
         process: function(bot,msg,suffix){ 
@@ -334,7 +500,7 @@ var commands = {
         process: function(bot,msg,suffix){console.log(msg.content);}
     },
 	"avatar": {
-        usage: "<user_name>",
+        usage: "<username>",
         description: "prints url to avatar or specified user",
         process: function(bot,msg,suffix){
 			var usr = 0;
@@ -632,7 +798,7 @@ bot.on("message", function (msg) {
 		else if(cmd) {
             cmd.process(bot,msg,suffix);
 		} else {
-			bot.sendMessage(msg.channel, "Invalid command " + cmdTxt);
+			//other bots may use same delimiter
 		}
 	} else {
 		//message isn't a command or is from us
