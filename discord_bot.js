@@ -768,7 +768,7 @@ bot.on("message", function (msg) {
 
     var server = msg.channel.server;
     var roles = server.roles;
-   console.log(roles[0] + roles[1]);
+   console.log(util.inspect(roles, false, 2));
     //var banished[] = server.usersWithRole(
          
 	//check if message is a command
