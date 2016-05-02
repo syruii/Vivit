@@ -765,6 +765,12 @@ bot.on("disconnected", function () {
 });
 
 bot.on("message", function (msg) {
+
+    var server = msg.channel.server;
+    var roles = server.roles;
+   console.log(roles[0] + roles[1]);
+    //var banished[] = server.usersWithRole(
+         
 	//check if message is a command
 	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) == 0)){
         console.log("treating " + msg.content + " from " + msg.author + " as command");
@@ -818,7 +824,7 @@ bot.on("message", function (msg) {
 bot.on("presence", function(data) {
 	//if(status === "online"){
 	//console.log("presence update");
-	console.log(data.user+" went "+data.status);
+	console.log(data.username+" went "+data.status);
 	//}
 });
 
