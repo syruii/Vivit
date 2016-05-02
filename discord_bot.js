@@ -774,10 +774,10 @@ bot.on("message", function (msg) {
         }
     }
     
-    var banished_users = msg.channel.server.usersWithRole(banished_role);
-    
-    for (i = 0; i < banished_users.length; i++) {
-        if (msg.author.id == banished_users[i].id) {
+    var user_roles = msg.channel.server.rolesOfUser(msg.author);
+
+    for (i = 0; i < user_roles.length; i++) {
+        if (banished_role.id == user_roles[i].id) {
            bot.sendMessage(msg.channel,msg.author + ", you have been banished.");
            return;
         }
