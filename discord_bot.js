@@ -769,19 +769,22 @@ bot.on("disconnected", function () {
 bot.on("message", function (msg) {
 
     for (i = 0; i < msg.channel.server.roles.length; i++) {
+        console.log(msg.channel.server.roles[i].name);
         if (msg.channel.server.roles[i].name == "Banished"){
             var banished_role = msg.channel.server.roles[i];
+            var user_roles = msg.channel.server.rolesOfUser(msg.author);
+            for (i = 0; i < user_roles.length; i++) {
+               if (banished_role.id == user_roles[i].id) {
+                  bot.sendMessage(msg.channel,msg.author + ", you have been banished.");
+                  return;
+               }
+            }
+            break;
         }
     }
+   
     
-    var user_roles = msg.channel.server.rolesOfUser(msg.author);
-
-    for (i = 0; i < user_roles.length; i++) {
-        if (banished_role.id == user_roles[i].id) {
-           bot.sendMessage(msg.channel,msg.author + ", you have been banished.");
-           return;
-        }
-    }
+    
 
     
     //console.log(util.inspect(roles, false, 2));
