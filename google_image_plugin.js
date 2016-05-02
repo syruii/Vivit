@@ -28,8 +28,12 @@ GoogleImagePlugin.prototype.respond = function(query, channel, bot) {
 			return;
 		}
 		if(!data.items){
-			bot.sendMessage(channel, "Error:\n" + data.error.message);
-		}
+                   if('error' in data) {
+                        bot.sendMessage(channel, "Error:\n" + data.error.message);
+	           } else {
+                        bot.sendMessage(channel, "Undefined error occured.");
+                   }
+               }
 		else if (!data.items || data.items.length == 0){	
 			bot.sendMessage(channel, "No result for '" + query + "'");
 
