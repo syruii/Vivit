@@ -6,6 +6,8 @@
 
 var Discord = require("discord.js");
 
+var util = require('util');
+
 var yt = require("./youtube_plugin");
 var youtube_plugin = new yt();
 
