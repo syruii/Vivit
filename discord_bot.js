@@ -774,18 +774,18 @@ bot.on("message", function (msg) {
 	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) == 0)){
   
             for (i = 0; i < msg.channel.server.roles.length; i++) {
-               console.log(msg.channel.server.roles[i].name);
-                  if (msg.channel.server.roles[i].name == "Banished"){
-                     var banished_role = msg.channel.server.roles[i];
-                     var user_roles = msg.channel.server.rolesOfUser(msg.author);
-                     for (i = 0; i < user_roles.length; i++) {
-                        if (banished_role.id == user_roles[i].id) {
-                           bot.sendMessage(msg.channel,msg.author + ", you have been banished.");
-                           return;
-                        }
-                     }
-                  break;
-             }
+              // console.log(msg.channel.server.roles[i].name);
+              if (msg.channel.server.roles[i].name == "Banished"){
+                  var banished_role = msg.channel.server.roles[i];
+                  var user_roles = msg.channel.server.rolesOfUser(msg.author);
+                  for (i = 0; i < user_roles.length; i++) {
+                      if (banished_role.id == user_roles[i].id) {
+                         bot.sendMessage(msg.channel,msg.author + ", you have been banished and cannot use any commands :(");
+                         return;
+                      }
+                  }
+              break;
+            }
          }      
          console.log("treating " + msg.content + " from " + msg.author + " as command");
 	 var cmdTxt = msg.content.split(" ")[0].substring(1);
