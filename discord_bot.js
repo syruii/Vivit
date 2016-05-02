@@ -6,6 +6,8 @@
 
 var Discord = require("discord.js");
 
+var util = require('util');
+
 var yt = require("./youtube_plugin");
 var youtube_plugin = new yt();
 
@@ -764,16 +766,34 @@ bot.on("disconnected", function () {
 	
 });
 
-bot.on("message", function (msg) {
+bot.on("message", function (msg) { 
+    //console.log(util.inspect(roles, false, 2));
+    //var banished[] = server.usersWithRole(
+         
 	//check if message is a command
 	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) == 0)){
-        console.log("treating " + msg.content + " from " + msg.author + " as command");
-		var cmdTxt = msg.content.split(" ")[0].substring(1);
-        var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space
-        if(msg.content.indexOf(bot.user.mention()) == 0){
+  
+            for (i = 0; i < msg.channel.server.roles.length; i++) {
+              // console.log(msg.channel.server.roles[i].name);
+              if (msg.channel.server.roles[i].name == "Banished"){
+                  var banished_role = msg.channel.server.roles[i];
+                  var user_roles = msg.channel.server.rolesOfUser(msg.author);
+                  for (i = 0; i < user_roles.length; i++) {
+                      if (banished_role.id == user_roles[i].id) {
+                         bot.sendMessage(msg.channel,msg.author + ", you have been banished and cannot use any commands :(");
+                         return;
+                      }
+                  }
+              break;
+            }
+         }      
+         console.log("treating " + msg.content + " from " + msg.author + " as command");
+	 var cmdTxt = msg.content.split(" ")[0].substring(1);
+         var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space
+         if(msg.content.indexOf(bot.user.mention()) == 0){
             cmdTxt = msg.content.split(" ")[1];
             suffix = msg.content.substring(bot.user.mention().length+cmdTxt.length+2);
-        }
+         }
 		alias = aliases[cmdTxt];
 		if(alias){
 			cmdTxt = alias[0];
@@ -818,7 +838,7 @@ bot.on("message", function (msg) {
 bot.on("presence", function(data) {
 	//if(status === "online"){
 	//console.log("presence update");
-	console.log(data.user+" went "+data.status);
+	console.log(data.username+" went "+data.status);
 	//}
 });
 
