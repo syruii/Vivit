@@ -768,9 +768,23 @@ bot.on("disconnected", function () {
 
 bot.on("message", function (msg) {
 
-    var server = msg.channel.server;
-    var roles = server.roles;
-   console.log(util.inspect(roles, false, 2));
+    for (i = 0; i < msg.channel.server.roles.length; i++) {
+        if (msg.channel.server.roles[i].name == "Banished"){
+            var banished_role = msg.channel.server.roles[i];
+        }
+    }
+    
+    var banished_users = msg.channel.server.usersWithRole(banished_role);
+    
+    for (i = 0; i < banished_users.length; i++) {
+        if (msg.author.id == banished_users[i].id) {
+           bot.sendMessage(msg.channel,msg.author + ", you have been banished.");
+           return;
+        }
+    }
+
+    
+    //console.log(util.inspect(roles, false, 2));
     //var banished[] = server.usersWithRole(
          
 	//check if message is a command
