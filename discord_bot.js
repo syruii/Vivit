@@ -780,8 +780,11 @@ bot.on("message", function (msg) {
                   var user_roles = msg.channel.server.rolesOfUser(msg.author);
                   for (i = 0; i < user_roles.length; i++) {
                       if (banished_role.id == user_roles[i].id) {
-                         bot.sendMessage(msg.channel,msg.author + ", you have been banished and cannot use any commands :(");
-                         return;
+                        bot.sendMessage(msg.channel,msg.author + ", you have been banished and cannot use any commands :(");
+                        return;
+                        //temporary ban list follows
+                      } else if (msg.author.id == 117025232333701128  || msg.author.id == 115717131085021185)
+                      	bot.sendMessage("Can't let you do that," + msg.channel,msg.author);
                       }
                   }
               break;
