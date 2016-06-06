@@ -784,7 +784,7 @@ bot.on("message", function (msg) {
                         return;
                         //temporary ban list follows
                       } else if (msg.author.id == 117025232333701128  || msg.author.id == 115717131085021185) {
-                      	bot.sendMessage(msg.channel,"Can't let you do that," + msg.channel,msg.author + "!");
+                      	bot.sendMessage(msg.channel,"Can't let you do that, " + msg.author + "!");
 			return;
                        }
                   }
