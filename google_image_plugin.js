@@ -22,7 +22,7 @@ GoogleImagePlugin.prototype.respond = function(query, channel, bot) {
 	var banlist = ["lady boy", "ladyboy", "seolhyun nude", "seolhyun naked", "porn"];
 	for (var i = 0; i < banlist.length; i++) {
 		if (query.toLowerCase().indexOf(banlist[i]) != -1){
-			bot.sendMessage(channel, "Disallowed word in query.");
+			//bot.sendMessage(channel, "Disallowed word in query.");
 			return;
 		}
 	}
