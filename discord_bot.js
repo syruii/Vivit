@@ -752,7 +752,7 @@ function randomWithRange(min, max)
    return parseInt(Math.random() * range + min);
 }
 
-var bot = new Discord.Client();
+var bot = new Discord.Client({autoReconnect: true});
 
 bot.on("ready", function () {
     loadFeeds();
@@ -762,7 +762,7 @@ bot.on("ready", function () {
 bot.on("disconnected", function () {
 
 	console.log("Disconnected!");
-	process.exit(1); //exit node.js with an error
+	//process.exit(1); //exit node.js with an error
 	
 });
 
@@ -883,4 +883,4 @@ function get_gif(tags, func) {
         }.bind(this));
     }
 
-bot.loginWithToken(AuthDetails.token);
+bot.loginWithToken(AuthDetails.email, AuthDetails.password);
