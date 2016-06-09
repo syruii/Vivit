@@ -772,7 +772,11 @@ bot.on("message", function (msg) {
          
 	//check if message is a command
 	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) == 0)){
-  
+	    //temporary ban list follows
+  	 /*   if (msg.author.id == 117025232333701128  || msg.author.id == 115717131085021185) {
+                bot.sendMessage(msg.channel,"Can't let you do that, " + msg.author + "!");
+		return;
+            } */
             for (i = 0; i < msg.channel.server.roles.length; i++) {
               // console.log(msg.channel.server.roles[i].name);
               if (msg.channel.server.roles[i].name == "Banished"){
@@ -780,13 +784,13 @@ bot.on("message", function (msg) {
                   var user_roles = msg.channel.server.rolesOfUser(msg.author);
                   for (i = 0; i < user_roles.length; i++) {
                       if (banished_role.id == user_roles[i].id) {
-                         bot.sendMessage(msg.channel,msg.author + ", you have been banished and cannot use any commands :(");
-                         return;
-                      }
+                        bot.sendMessage(msg.channel,msg.author + ", you have been banished and cannot use any commands :(");
+                        return;
+                      } 
                   }
               break;
-            }
-         }      
+              }
+            }      
          console.log("treating " + msg.content + " from " + msg.author + " as command");
 	 var cmdTxt = msg.content.split(" ")[0].substring(1);
          var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space

@@ -18,6 +18,14 @@ GoogleImagePlugin.prototype._respondToChatMessage = function(roomId, chatterId, 
 
 GoogleImagePlugin.prototype.respond = function(query, channel, bot) {
 	//just gets the first result
+	//thanks peng
+	var banlist = ["lady boy", "ladyboy", "seolhyun nude", "seolhyun naked", "porn"];
+	for (var i = 0; i < banlist.length; i++) {
+		if (query.toLowerCase().indexOf(banlist[i]) != -1){
+			//bot.sendMessage(channel, "Disallowed word in query.");
+			return;
+		}
+	}
 	var num = 1; //looks like 4 results each 'page'
 	this.request("https://www.googleapis.com/customsearch/v1?q=" + (query.replace(/\s/g, '+')) + "&cx=" + AuthDetails.custom_search_cx + "&num=1&searchType=image&start=1&key=" + AuthDetails.custom_search_api_key, function(err, res, body) {
 		var data, error;
