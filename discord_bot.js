@@ -879,7 +879,7 @@ function get_gif(tags, func) {
         }.bind(this));
     }
 
-bot.loginWithToken(token, function (error) { //Login
+bot.loginWithToken(AuthDetails.token, function (error) { //Login
     if (error) {
         console.log("Error when logging in: " + errorC(error.message));
         process.exit(0);
