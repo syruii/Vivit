@@ -879,4 +879,4 @@ function get_gif(tags, func) {
         }.bind(this));
     }
 
-bot.login(AuthDetails.email, AuthDetails.password);
+bot.loginWithToken(AuthDetails.token);
