@@ -420,43 +420,6 @@ var commands = {
         description: "gets image matching tags from google",
         process: function(bot,msg,suffix){ google_image_plugin.respond(suffix,msg.channel,bot);}
     },
-    "pullanddeploy": {
-        description: "bot will perform a git pull master and restart with the new code",
-        process: function(bot,msg,suffix) {
-            bot.sendMessage(msg.channel,"fetching updates...",function(error,sentMsg){
-                console.log("updating...");
-	            var spawn = require('child_process').spawn;
-                var log = function(err,stdout,stderr){
-                    if(stdout){console.log(stdout);}
-                    if(stderr){console.log(stderr);}
-                };
-                var fetch = spawn('git', ['fetch']);
-                fetch.stdout.on('data',function(data){
-                    console.log(data.toString());
-                });
-                fetch.on("close",function(code){
-                    var reset = spawn('git', ['reset','--hard','origin/master']);
-                    reset.stdout.on('data',function(data){
-                        console.log(data.toString());
-                    });
-                    reset.on("close",function(code){
-                        var npm = spawn('npm', ['install']);
-                        npm.stdout.on('data',function(data){
-                            console.log(data.toString());
-                        });
-                        npm.on("close",function(code){
-                            console.log("goodbye");
-                            bot.sendMessage(msg.channel,"brb!",function(){
-                                bot.logout(function(){
-                                    process.exit();
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        }
-    },
     "meme": {
         usage: 'meme "top text" "bottom text"',
 		description: "make shitty memes",
@@ -480,20 +443,6 @@ var commands = {
                 str += m + "\n"
             }
             bot.sendMessage(msg.channel,str);
-        }
-    },
-    "version": {
-        description: "returns the git commit this bot is running",
-        process: function(bot,msg,suffix) {
-            var commit = require('child_process').spawn('git', ['log','-n','1']);
-            commit.stdout.on('data', function(data) {
-                bot.sendMessage(msg.channel,data);
-            });
-            commit.on('close',function(code) {
-                if( code != 0){
-                    bot.sendMessage(msg.channel,"failed checking git version!");
-                }
-            });
         }
     },
     "log": {
@@ -765,7 +714,7 @@ bot.on("disconnected", function () {
 	process.exit(1); //exit node.js with an error
 	
 });
-
+/*
 bot.on("message", function (msg) { 
     //console.log(util.inspect(roles, false, 2));
     //var banished[] = server.usersWithRole(
@@ -878,7 +827,7 @@ function get_gif(tags, func) {
             }
         }.bind(this));
     }
-
+*/
 bot.loginWithToken(AuthDetails.token, function (error) { //Login
     if (error) {
         console.log("Error when logging in: " + errorC(error.message));
