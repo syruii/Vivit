@@ -48,7 +48,7 @@ GoogleImagePlugin.prototype.respond = function(query, channel, author, bot) {
 			return
 		}
 		else if("link" in data.items[0]){
-			bot.sendMessage(channel, author + data.items[0].link);
+			bot.sendMessage(channel, author + ",\n" + data.items[0].link);
 		}
 	});
 	
