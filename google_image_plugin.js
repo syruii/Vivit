@@ -16,7 +16,7 @@ GoogleImagePlugin.prototype._respondToChatMessage = function(roomId, chatterId, 
 	return this._respond(roomId, message);
 }
 
-GoogleImagePlugin.prototype.respond = function(query, channel, bot) {
+GoogleImagePlugin.prototype.respond = function(query, channel, author, bot) {
 	//just gets the first result
 	//thanks peng
 	var banlist = ["lady boy", "ladyboy", "seolhyun nude", "seolhyun naked", "porn"];
@@ -48,7 +48,7 @@ GoogleImagePlugin.prototype.respond = function(query, channel, bot) {
 			return
 		}
 		else if("link" in data.items[0]){
-			bot.sendMessage(channel, data.items[0].link);
+			bot.sendMessage(channel, author + data.items[0].link);
 		}
 	});
 	
