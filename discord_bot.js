@@ -418,7 +418,7 @@ var commands = {
     "image": {
         usage: "<image tags>",
         description: "gets image matching tags from google",
-        process: function(bot,msg,suffix){ google_image_plugin.respond(suffix,msg.channel,bot);}
+        process: function(bot,msg,suffix){ google_image_plugin.respond(suffix,msg.channel,msg.author,bot);}
     },
     "pullanddeploy": {
         description: "bot will perform a git pull master and restart with the new code",
