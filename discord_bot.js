@@ -883,4 +883,4 @@ function get_gif(tags, func) {
         }.bind(this));
     }
 
-bot.loginWithToken(AuthDetails.email, AuthDetails.password);
+bot.login(AuthDetails.email, AuthDetails.password);
